@@ -14,6 +14,9 @@
 
             TestCreatures();
 
+            TestDirections();
+
+
         }
         static void TestCreatures()
         {
@@ -48,6 +51,27 @@
             a = new() { Description = "Mice           are great", Size = 40 };
             Console.WriteLine(a.Info);
         }
+        static void TestDirections()
+        {
+            Creature c = new("Shrek", 7);
+            c.SayHi();
+
+            Console.WriteLine("\n* Up");
+            c.Go(Direction.Up);
+
+            Console.WriteLine("\n* Right, Left, Left, Down");
+            Direction[] directions = {
+                Direction.Right, Direction.Left, Direction.Left, Direction.Down
+            };
+            c.Go(directions);
+
+            Console.WriteLine("\n* LRL");
+            c.Go("LRL");
+
+            Console.WriteLine("\n* xxxdR lyyLTyu");
+            c.Go("xxxdR lyyLTyu");
+        }
+
 
     }
 

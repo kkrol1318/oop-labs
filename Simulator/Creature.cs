@@ -37,6 +37,24 @@
             if (_level < 10) _level++;
         }
 
+        public void Go(Direction direction)
+        {
+            string dirName = direction.ToString().ToLower();
+            Console.WriteLine($"{Name} goes {dirName}.");
+        }
+
+        public void Go(Direction[] directions)
+        {
+            foreach (var d in directions)
+                Go(d);
+        }
+
+        public void Go(string pattern)
+        {
+            var parsed = DirectionParser.Parse(pattern);
+            Go(parsed);
+        }
+
         private static string ValidateName(string? raw)
         {
             string s = raw ?? "Unknown";
