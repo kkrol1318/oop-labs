@@ -1,85 +1,84 @@
-﻿namespace Simulator
+﻿
+namespace Simulator;
+
+public abstract class Creature
 {
-    public class Creature
+    private string _name = "Unknown";
+    private int _level = 1;
+
+    public string Name
     {
-        private string _name = "Unknown";
-        private int _level = 1;
+        get => _name;
+        init => _name = ValidateName(value);
+    }
 
-        public string Name
-        {
-            get => _name;
-            init => _name = ValidateName(value);
-        }
+    public int Level
+    {
+        get => _level;
+        init => _level = ValidateLevel(value);
+    }
 
-        public int Level
-        {
-            get => _level;
-            init => _level = ValidateLevel(value);
-        }
+    public string Info => $"{Name} <{Level}>";
 
-        public string Info => $"{Name} <{Level}>";
+    protected Creature() { }
 
-        public Creature() { }
+    protected Creature(string name, int level = 1)
+    {
+        Name = name;
+        Level = level;
+    }
 
-        public Creature(string name, int level = 1)
-        {
-            Name = name;
-            Level = level;
-        }
+    public abstract void SayHi();
 
-        public void SayHi()
-        {
-            Console.WriteLine($"Hi! I'm {Name} at level {Level}.");
-        }
+    public abstract int Power { get; }
 
-        public void Upgrade()
-        {
-            if (_level < 10) _level++;
-        }
+    public void Upgrade()
+    {
+        if (_level < 10) _level++;
+    }
 
-        public void Go(Direction direction)
-        {
-            string dirName = direction.ToString().ToLower();
-            Console.WriteLine($"{Name} goes {dirName}.");
-        }
+    public void Go(Direction direction)
+    {
+        string dirName = direction.ToString().ToLower();
+        Console.WriteLine($"{Name} goes {dirName}.");
+    }
 
-        public void Go(Direction[] directions)
-        {
-            foreach (var d in directions)
-                Go(d);
-        }
+    public void Go(Direction[] directions)
+    {
+        foreach (var d in directions)
+            Go(d);
+    }
 
-        public void Go(string pattern)
-        {
-            var parsed = DirectionParser.Parse(pattern);
-            Go(parsed);
-        }
+    public void Go(string pattern)
+    {
+        var parsed = DirectionParser.Parse(pattern);
+        Go(parsed);
+    }
 
-        private static string ValidateName(string? raw)
-        {
-            string s = raw ?? "Unknown";
-            s = s.Trim();
+    private static string ValidateName(string? raw)
+    {
+        string s = raw ?? "Unknown";
+        s = s.Trim();
 
-            if (s.Length < 3)
-                s = s.PadRight(3, '#');
+        if (s.Length < 3)
+            s = s.PadRight(3, '#');
 
-            if (s.Length > 25)
-                s = s[..25].TrimEnd();
+        if (s.Length > 25)
+            s = s[..25].TrimEnd();
 
-            if (s.Length < 3)
-                s = s.PadRight(3, '#');
+        if (s.Length < 3)
+            s = s.PadRight(3, '#');
 
-            if (s.Length > 0 && char.IsLetter(s[0]) && char.IsLower(s[0]))
-                s = char.ToUpperInvariant(s[0]) + s[1..];
+        if (s.Length > 0 && char.IsLetter(s[0]) && char.IsLower(s[0]))
+            s = char.ToUpperInvariant(s[0]) + s[1..];
 
-            return s;
-        }
+        return s;
+    }
 
-        private static int ValidateLevel(int value)
-        {
-            if (value < 1) return 1;
-            if (value > 10) return 10;
-            return value;
-        }
+    private static int ValidateLevel(int value)
+    {
+        if (value < 1) return 1;
+        if (value > 10) return 10;
+        return value;
     }
 }
