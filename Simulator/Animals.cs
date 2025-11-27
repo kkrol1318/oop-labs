@@ -12,7 +12,8 @@ public class Animals
 
     public uint Size { get; set; } = 3;
 
-    public string Info => $"{Description} <{Size}>";
+    public virtual string Info => $"{Description} <{Size}>";
+
     private static string ValidateDescription(string? raw)
     {
         string baseValue = string.IsNullOrWhiteSpace(raw) ? "Unknown" : raw;
@@ -24,5 +25,11 @@ public class Animals
 
         return s;
     }
+    public override string ToString()
+    {
+        string typeName = GetType().Name.ToUpperInvariant();
+        return $"{typeName}: {Info}";
+    }
+
 
 }

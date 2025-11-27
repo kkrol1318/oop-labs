@@ -34,6 +34,7 @@ public class Orc : Creature
             _rage = Validator.Limiter(_rage + 1, 0, 10);
         }
     }
+    public override string Info => $"{Name} [{Level}][{Rage}]";
 
     public override int Power => 7 * Level + 3 * Rage;
 }

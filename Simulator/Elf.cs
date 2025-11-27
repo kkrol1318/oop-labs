@@ -34,6 +34,8 @@ public class Elf : Creature
             _agility = Validator.Limiter(_agility + 1, 0, 10);
         }
     }
+    public override string Info => $"{Name} [{Level}][{Agility}]";
+
 
     public override int Power => 8 * Level + 2 * Agility;
 }

@@ -18,7 +18,7 @@ public abstract class Creature
         init => _level = ValidateLevel(value);
     }
 
-    public string Info => $"{Name} <{Level}>";
+    public abstract string Info { get; }
 
     protected Creature() { }
 
@@ -26,6 +26,11 @@ public abstract class Creature
     {
         Name = name;
         Level = level;
+    }
+    public override string ToString()
+    {
+        string typeName = GetType().Name.ToUpperInvariant();
+        return $"{typeName}: {Info}";
     }
 
     public abstract void SayHi();
