@@ -57,17 +57,9 @@ public abstract class Creature
 
     private static string ValidateName(string? raw)
     {
-        string s = raw ?? "Unknown";
-        s = s.Trim();
+        string baseValue = string.IsNullOrWhiteSpace(raw) ? "Unknown" : raw;
 
-        if (s.Length < 3)
-            s = s.PadRight(3, '#');
-
-        if (s.Length > 25)
-            s = s[..25].TrimEnd();
-
-        if (s.Length < 3)
-            s = s.PadRight(3, '#');
+        string s = Validator.Shortener(baseValue, min: 3, max: 25, placeholder: '#');
 
         if (s.Length > 0 && char.IsLetter(s[0]) && char.IsLower(s[0]))
             s = char.ToUpperInvariant(s[0]) + s[1..];
@@ -75,10 +67,10 @@ public abstract class Creature
         return s;
     }
 
+
     private static int ValidateLevel(int value)
     {
-        if (value < 1) return 1;
-        if (value > 10) return 10;
-        return value;
+        return Validator.Limiter(value, 1, 10);
     }
+
 }

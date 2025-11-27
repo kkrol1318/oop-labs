@@ -1,5 +1,4 @@
-﻿
-namespace Simulator;
+﻿namespace Simulator;
 
 public class Elf : Creature
 {
@@ -9,7 +8,7 @@ public class Elf : Creature
     public int Agility
     {
         get => _agility;
-        init => _agility = LimitStat(value);
+        init => _agility = Validator.Limiter(value, 0, 10);
     }
 
     public Elf() { }
@@ -32,16 +31,9 @@ public class Elf : Creature
 
         if (_singCount % 3 == 0)
         {
-            _agility = LimitStat(_agility + 1);
+            _agility = Validator.Limiter(_agility + 1, 0, 10);
         }
     }
 
     public override int Power => 8 * Level + 2 * Agility;
-
-    private static int LimitStat(int value)
-    {
-        if (value < 0) return 0;
-        if (value > 10) return 10;
-        return value;
-    }
 }

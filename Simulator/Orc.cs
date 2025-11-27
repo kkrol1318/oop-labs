@@ -1,5 +1,4 @@
-﻿
-namespace Simulator;
+﻿namespace Simulator;
 
 public class Orc : Creature
 {
@@ -9,7 +8,7 @@ public class Orc : Creature
     public int Rage
     {
         get => _rage;
-        init => _rage = LimitStat(value);
+        init => _rage = Validator.Limiter(value, 0, 10);
     }
 
     public Orc() { }
@@ -32,16 +31,9 @@ public class Orc : Creature
 
         if (_huntCount % 2 == 0)
         {
-            _rage = LimitStat(_rage + 1);
+            _rage = Validator.Limiter(_rage + 1, 0, 10);
         }
     }
 
     public override int Power => 7 * Level + 3 * Rage;
-
-    private static int LimitStat(int value)
-    {
-        if (value < 0) return 0;
-        if (value > 10) return 10;
-        return value;
-    }
 }
