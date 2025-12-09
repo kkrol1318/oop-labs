@@ -21,20 +21,29 @@ public class SmallSquareMap : Map
 
     public override bool Exist(Point p)
     {
-        return _bounds.Contains(p);
+        return p.X >= 0 && p.X < Size &&
+               p.Y >= 0 && p.Y < Size;
     }
+
 
     public override Point Next(Point p, Direction d)
     {
         Point next = p.Next(d);
 
-        return Exist(next) ? next : p;
+        if (!Exist(next))
+            return p;
+
+        return next;
     }
 
     public override Point NextDiagonal(Point p, Direction d)
     {
         Point next = p.NextDiagonal(d);
 
-        return Exist(next) ? next : p;
+        if (!Exist(next))
+            return p;
+
+        return next;
     }
+
 }
