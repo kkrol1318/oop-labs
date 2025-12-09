@@ -1,4 +1,5 @@
 ﻿using Simulator;
+using Simulator.Maps;
 
 namespace Runner;
 
@@ -21,6 +22,28 @@ internal class Program
         TestObjectsToString();
 
         Console.WriteLine("\nEND");
+
+
+        Point p = new(10, 25);
+
+        Console.WriteLine(p.Next(Direction.Right));         // (11, 25)
+        Console.WriteLine(p.NextDiagonal(Direction.Right)); // (11, 24)
+        Console.WriteLine(p.Next(Direction.Up));            // (10, 24)
+        Console.WriteLine(p.NextDiagonal(Direction.Up));    // (11, 24)
+
+
+        var map = new SmallSquareMap(5);
+
+        Point p2 = new(0, 0);
+
+        Console.WriteLine(map.Next(p2, Direction.Left));   // (0,0)
+        Console.WriteLine(map.Next(p2, Direction.Up));     // (0,0)
+        Console.WriteLine(map.Next(p2, Direction.Right));  // (1,0)
+        Console.WriteLine(map.Next(p2, Direction.Down));   // (0,1)
+
+        Console.WriteLine(map.Exist(new Point(4, 4)));    // True
+        Console.WriteLine(map.Exist(new Point(10, 10)));  // False
+
     }
 
     static void TestElfsAndOrcs()
