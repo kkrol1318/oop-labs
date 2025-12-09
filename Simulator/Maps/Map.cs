@@ -1,31 +1,75 @@
-﻿namespace Simulator.Maps;
+﻿using Simulator;
 
-/// <summary>
-/// Map of points.
-/// </summary>
+namespace Simulator.Maps;
+
 public abstract class Map
 {
-    /// <summary>
-    /// Check if give point belongs to the map.
-    /// </summary>
-    /// <param name="p">Point to check.</param>
-    /// <returns></returns>
+    public int SizeX { get; }
+
+    public int SizeY { get; }
+
+    private readonly Dictionary<Point, List<Creature>> _creatures = new();
+
+    protected Map(int sizeX, int sizeY)
+    {
+        if (sizeX < 5 || sizeY < 5)
+            throw new ArgumentOutOfRangeException(nameof(sizeX),
+                "Map must be at least 5x5.");
+
+        SizeX = sizeX;
+        SizeY = sizeY;
+    }
+
     public abstract bool Exist(Point p);
 
-    /// <summary>
-    /// Next position to the point in a given direction.
-    /// </summary>
-    /// <param name="p">Starting point.</param>
-    /// <param name="d">Direction.</param>
-    /// <returns>Next point.</returns>
     public abstract Point Next(Point p, Direction d);
 
-    /// <summary>
-    /// Next diagonal position to the point in a given direction
-    /// rotated 45 degrees clockwise.
-    /// </summary>
-    /// <param name="p">Starting point.</param>
-    /// <param name="d">Direction.</param>
-    /// <returns>Next point.</returns>
     public abstract Point NextDiagonal(Point p, Direction d);
+
+    public void Add(Creature creature, Point p)
+    {
+        if (creature is null)
+            throw new ArgumentNullException(nameof(creature));
+
+        if (!Exist(p))
+            throw new ArgumentOutOfRangeException(nameof(p),
+                "Point does not belong to the map.");
+
+        if (!_creatures.TryGetValue(p, out var list))
+        {
+            list = new List<Creature>();
+            _creatures[p] = list;
+        }
+
+        if (!list.Contains(creature))
+            list.Add(creature);
+    }
+
+    public void Remove(Creature creature, Point p)
+    {
+        if (creature is null)
+            return;
+
+        if (!_creatures.TryGetValue(p, out var list))
+            return;
+
+        list.Remove(creature);
+        if (list.Count == 0)
+            _creatures.Remove(p);
+    }
+
+    public void Move(Creature creature, Point from, Point to)
+    {
+        Remove(creature, from);
+        Add(creature, to);
+    }
+
+    public IEnumerable<Creature> At(Point p)
+    {
+        return _creatures.TryGetValue(p, out var list)
+            ? list
+            : Enumerable.Empty<Creature>();
+    }
+
+    public IEnumerable<Creature> At(int x, int y) => At(new Point(x, y));
 }

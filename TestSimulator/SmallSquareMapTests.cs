@@ -9,7 +9,9 @@ public class SmallSquareMapTests
     public void Constructor_ValidSize_ShouldSetSize()
     {
         var m = new SmallSquareMap(10);
-        Assert.Equal(10, m.Size);
+
+        Assert.Equal(10, m.SizeX);
+        Assert.Equal(10, m.SizeY);
     }
 
     [Theory]
@@ -33,7 +35,7 @@ public class SmallSquareMapTests
 
     [Theory]
     [InlineData(3, 3, Direction.Up, 3, 4)]
-    [InlineData(4, 4, Direction.Up, 4, 4)]   // cannot move outside
+    [InlineData(4, 4, Direction.Up, 4, 4)]
     [InlineData(0, 2, Direction.Left, 0, 2)]
     public void Next_ShouldHandleBoundaries(int x, int y, Direction d, int ex, int ey)
     {

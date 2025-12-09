@@ -2,12 +2,12 @@
 
 public static class DirectionParser
 {
-    public static Direction[] Parse(string? pattern)
+    public static List<Direction> Parse(string? pattern)
     {
-        if (string.IsNullOrEmpty(pattern))
-            return Array.Empty<Direction>();
-
         List<Direction> directions = new();
+
+        if (string.IsNullOrEmpty(pattern))
+            return directions;
 
         foreach (char ch in pattern)
         {
@@ -21,6 +21,7 @@ public static class DirectionParser
             }
         }
 
-        return directions.ToArray();
+        return directions;
     }
+
 }

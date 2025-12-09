@@ -1,49 +1,28 @@
-﻿using System;
-
-namespace Simulator.Maps;
+﻿namespace Simulator.Maps;
 
 public class SmallSquareMap : Map
 {
-    public int Size { get; }
-
-    private readonly Rectangle _bounds;
-
     public SmallSquareMap(int size)
+        : base(size, size)
     {
-        if (size < 5 || size > 20)
+        if (size > 20)
             throw new ArgumentOutOfRangeException(nameof(size),
-                "Size must be between 5 and 20.");
-
-        Size = size;
-
-        _bounds = new Rectangle(0, 0, size - 1, size - 1);
+                "Max size is 20.");
     }
 
     public override bool Exist(Point p)
-    {
-        return p.X >= 0 && p.X < Size &&
-               p.Y >= 0 && p.Y < Size;
-    }
-
+        => p.X >= 0 && p.X < SizeX
+        && p.Y >= 0 && p.Y < SizeY;
 
     public override Point Next(Point p, Direction d)
     {
-        Point next = p.Next(d);
-
-        if (!Exist(next))
-            return p;
-
-        return next;
+        var next = p.Next(d);
+        return Exist(next) ? next : p;
     }
 
     public override Point NextDiagonal(Point p, Direction d)
     {
-        Point next = p.NextDiagonal(d);
-
-        if (!Exist(next))
-            return p;
-
-        return next;
+        var next = p.NextDiagonal(d);
+        return Exist(next) ? next : p;
     }
-
 }

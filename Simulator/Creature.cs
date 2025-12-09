@@ -1,4 +1,6 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+
+namespace Simulator;
 
 public abstract class Creature
 {
@@ -18,6 +20,10 @@ public abstract class Creature
     }
 
     public abstract string Info { get; }
+
+    public Map? Map { get; private set; }
+
+    public Point? Position { get; private set; }
 
     protected Creature() { }
 
@@ -42,20 +48,33 @@ public abstract class Creature
         if (_level < 10) _level++;
     }
 
-    public string Go(Direction direction)
+    public void AssignMap(Map map, Point position)
     {
-        return direction.ToString().ToLower();
+        Map = map ?? throw new ArgumentNullException(nameof(map));
+        Position = position;
+        map.Add(this, position);
     }
 
-    public string[] Go(Direction[] directions)
+    public void RemoveFromMap()
     {
-        return directions.Select(Go).ToArray();
+        if (Map is null || Position is null)
+            return;
+
+        Map.Remove(this, Position.Value);
+        Map = null;
+        Position = null;
     }
 
-    public string[] Go(string pattern)
+    public void Go(Direction direction)
     {
-        var parsed = DirectionParser.Parse(pattern);
-        return Go(parsed);
+        if (Map is null || Position is null)
+            return;
+
+        var current = Position.Value;
+        var next = Map.Next(current, direction);
+
+        Map.Move(this, current, next);
+        Position = next;
     }
 
     private static string ValidateName(string? raw)
