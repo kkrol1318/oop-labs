@@ -19,14 +19,13 @@ public class Orc : Creature
         Rage = rage;
     }
 
-    public override void SayHi()
+    public override string Greeting()
     {
-        Console.WriteLine($"Hi! I'm {Name} at level {Level}.");
+        return $"Hi! I'm {Name} at level {Level}.";
     }
 
     public void Hunt()
     {
-        Console.WriteLine($"{Name} is hunting.");
         _huntCount++;
 
         if (_huntCount % 2 == 0)
@@ -34,6 +33,7 @@ public class Orc : Creature
             _rage = Validator.Limiter(_rage + 1, 0, 10);
         }
     }
+
     public override string Info => $"{Name} [{Level}][{Rage}]";
 
     public override int Power => 7 * Level + 3 * Rage;

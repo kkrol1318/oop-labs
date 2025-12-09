@@ -25,11 +25,10 @@ public class Animals
 
         return s;
     }
+
     public override string ToString()
     {
         string typeName = GetType().Name.ToUpperInvariant();
         return $"{typeName}: {Info}";
     }
-
-
 }

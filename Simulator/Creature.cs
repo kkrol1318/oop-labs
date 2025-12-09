@@ -1,5 +1,4 @@
-﻿
-namespace Simulator;
+﻿namespace Simulator;
 
 public abstract class Creature
 {
@@ -27,13 +26,14 @@ public abstract class Creature
         Name = name;
         Level = level;
     }
+
     public override string ToString()
     {
         string typeName = GetType().Name.ToUpperInvariant();
         return $"{typeName}: {Info}";
     }
 
-    public abstract void SayHi();
+    public abstract string Greeting();
 
     public abstract int Power { get; }
 
@@ -42,22 +42,20 @@ public abstract class Creature
         if (_level < 10) _level++;
     }
 
-    public void Go(Direction direction)
+    public string Go(Direction direction)
     {
-        string dirName = direction.ToString().ToLower();
-        Console.WriteLine($"{Name} goes {dirName}.");
+        return direction.ToString().ToLower();
     }
 
-    public void Go(Direction[] directions)
+    public string[] Go(Direction[] directions)
     {
-        foreach (var d in directions)
-            Go(d);
+        return directions.Select(Go).ToArray();
     }
 
-    public void Go(string pattern)
+    public string[] Go(string pattern)
     {
         var parsed = DirectionParser.Parse(pattern);
-        Go(parsed);
+        return Go(parsed);
     }
 
     private static string ValidateName(string? raw)
@@ -72,10 +70,8 @@ public abstract class Creature
         return s;
     }
 
-
     private static int ValidateLevel(int value)
     {
         return Validator.Limiter(value, 1, 10);
     }
-
 }

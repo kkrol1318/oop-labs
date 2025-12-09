@@ -19,14 +19,13 @@ public class Elf : Creature
         Agility = agility;
     }
 
-    public override void SayHi()
+    public override string Greeting()
     {
-        Console.WriteLine($"Hi! I'm {Name} at level {Level}.");
+        return $"Hi! I'm {Name} at level {Level}.";
     }
 
     public void Sing()
     {
-        Console.WriteLine($"{Name} is singing.");
         _singCount++;
 
         if (_singCount % 3 == 0)
@@ -34,8 +33,8 @@ public class Elf : Creature
             _agility = Validator.Limiter(_agility + 1, 0, 10);
         }
     }
-    public override string Info => $"{Name} [{Level}][{Agility}]";
 
+    public override string Info => $"{Name} [{Level}][{Agility}]";
 
     public override int Power => 8 * Level + 2 * Agility;
 }
