@@ -81,4 +81,10 @@ public class Simulation
         if (_turn >= _moves.Count * Creatures.Count)
             Finished = true;
     }
+
+    public Point MapPositionOf(Creature creature)
+    {
+        return Map.PositionOf(creature);
+    }
+
 }

@@ -1,11 +1,8 @@
-﻿using Simulator;
-
-namespace Simulator.Maps;
+﻿namespace Simulator.Maps;
 
 public abstract class Map
 {
     public int SizeX { get; }
-
     public int SizeY { get; }
 
     private readonly Dictionary<Point, List<Creature>> _creatures = new();
@@ -21,9 +18,7 @@ public abstract class Map
     }
 
     public abstract bool Exist(Point p);
-
     public abstract Point Next(Point p, Direction d);
-
     public abstract Point NextDiagonal(Point p, Direction d);
 
     public void Add(Creature creature, Point p)
@@ -65,11 +60,19 @@ public abstract class Map
     }
 
     public IEnumerable<Creature> At(Point p)
-    {
-        return _creatures.TryGetValue(p, out var list)
+        => _creatures.TryGetValue(p, out var list)
             ? list
             : Enumerable.Empty<Creature>();
-    }
 
     public IEnumerable<Creature> At(int x, int y) => At(new Point(x, y));
+    public Point PositionOf(Creature creature)
+    {
+        foreach (var kv in _creatures)
+        {
+            if (kv.Value.Contains(creature))
+                return kv.Key;
+        }
+
+        throw new ArgumentException("Creature is not on this map.", nameof(creature));
+    }
 }

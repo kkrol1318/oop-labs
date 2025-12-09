@@ -93,4 +93,7 @@ public abstract class Creature
     {
         return Validator.Limiter(value, 1, 10);
     }
+
+    public virtual char Symbol => '?';
+
 }

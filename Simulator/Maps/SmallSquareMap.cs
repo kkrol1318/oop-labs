@@ -1,4 +1,6 @@
-﻿namespace Simulator.Maps;
+﻿using System;
+
+namespace Simulator.Maps;
 
 public class SmallSquareMap : Map
 {
