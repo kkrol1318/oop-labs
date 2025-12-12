@@ -6,11 +6,23 @@ using System.Text;
 Console.OutputEncoding = Encoding.UTF8;
 
 SmallSquareMap map = new(5);
-List<Creature> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
-List<Point> points = [new(2, 2), new(3, 1)];
+
+List<IMappable> objects =
+[
+    new Orc("Gorbag"),
+    new Elf("Elandor")
+];
+
+List<Point> points =
+[
+    new(2, 2),
+    new(3, 1)
+];
+
 string moves = "dlrludl";
 
-Simulation simulation = new(map, creatures, points, moves);
+Simulation simulation = new(map, objects, points, moves);
+
 MapVisualizer visualizer = new(simulation);
 
 visualizer.Draw();

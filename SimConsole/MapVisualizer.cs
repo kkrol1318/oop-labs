@@ -96,7 +96,7 @@ public class MapVisualizer
     }
     private void DrawCreaturesInfo()
     {
-        foreach (var c in _simulation.Creatures)
+        foreach (var c in _simulation.Objects)
         {
             var pos = _simulation.MapPositionOf(c);
             Console.WriteLine($"{c.GetType().Name.ToUpper()}: {c.Info} at ({pos.X}, {pos.Y})");

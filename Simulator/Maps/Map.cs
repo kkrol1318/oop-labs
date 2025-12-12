@@ -1,11 +1,13 @@
-﻿namespace Simulator.Maps;
+﻿using Simulator.Maps;
+
+namespace Simulator.Maps;
 
 public abstract class Map
 {
     public int SizeX { get; }
     public int SizeY { get; }
 
-    private readonly Dictionary<Point, List<Creature>> _creatures = new();
+    private readonly Dictionary<Point, List<IMappable>> _objects = new();
 
     protected Map(int sizeX, int sizeY)
     {
@@ -21,58 +23,63 @@ public abstract class Map
     public abstract Point Next(Point p, Direction d);
     public abstract Point NextDiagonal(Point p, Direction d);
 
-    public void Add(Creature creature, Point p)
+    public void Add(IMappable obj, Point p)
     {
-        if (creature is null)
-            throw new ArgumentNullException(nameof(creature));
+        if (obj is null)
+            throw new ArgumentNullException(nameof(obj));
 
         if (!Exist(p))
             throw new ArgumentOutOfRangeException(nameof(p),
                 "Point does not belong to the map.");
 
-        if (!_creatures.TryGetValue(p, out var list))
+        if (!_objects.TryGetValue(p, out var list))
         {
-            list = new List<Creature>();
-            _creatures[p] = list;
+            list = new List<IMappable>();
+            _objects[p] = list;
         }
 
-        if (!list.Contains(creature))
-            list.Add(creature);
+        if (!list.Contains(obj))
+            list.Add(obj);
     }
 
-    public void Remove(Creature creature, Point p)
+    public void Remove(IMappable obj, Point p)
     {
-        if (creature is null)
+        if (obj is null)
             return;
 
-        if (!_creatures.TryGetValue(p, out var list))
+        if (!_objects.TryGetValue(p, out var list))
             return;
 
-        list.Remove(creature);
+        list.Remove(obj);
         if (list.Count == 0)
-            _creatures.Remove(p);
+            _objects.Remove(p);
     }
 
-    public void Move(Creature creature, Point from, Point to)
+    public void Move(IMappable obj, Point from, Point to)
     {
-        Remove(creature, from);
-        Add(creature, to);
+        Remove(obj, from);
+        Add(obj, to);
     }
 
-    public IEnumerable<Creature> At(Point p)
-        => _creatures.TryGetValue(p, out var list)
+    public IEnumerable<IMappable> At(Point p)
+        => _objects.TryGetValue(p, out var list)
             ? list
-            : Enumerable.Empty<Creature>();
+            : Enumerable.Empty<IMappable>();
 
-    public IEnumerable<Creature> At(int x, int y) => At(new Point(x, y));
-    public Point PositionOf(Creature creature)
+    public IEnumerable<IMappable> At(int x, int y)
+        => At(new Point(x, y));
+
+    public Point PositionOf(IMappable obj)
     {
-        foreach (var kv in _creatures)
+        foreach (var kv in _objects)
         {
-            if (kv.Value.Contains(creature))
+            if (kv.Value.Contains(obj))
                 return kv.Key;
         }
 
-        throw new ArgumentException("Creature is not on this map.", nameof(creature));
+        throw new ArgumentException(
+            "Object is not on this map.",
+            nameof(obj)
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Simulator;
 
-public abstract class Creature
+public abstract class Creature : IMappable
 {
     private string _name = "Unknown";
     private int _level = 1;
@@ -20,10 +20,7 @@ public abstract class Creature
     }
 
     public abstract string Info { get; }
-
-    public Map? Map { get; private set; }
-
-    public Point? Position { get; private set; }
+    public virtual char Symbol => '?';
 
     protected Creature() { }
 
@@ -40,41 +37,11 @@ public abstract class Creature
     }
 
     public abstract string Greeting();
-
     public abstract int Power { get; }
 
     public void Upgrade()
     {
         if (_level < 10) _level++;
-    }
-
-    public void AssignMap(Map map, Point position)
-    {
-        Map = map ?? throw new ArgumentNullException(nameof(map));
-        Position = position;
-        map.Add(this, position);
-    }
-
-    public void RemoveFromMap()
-    {
-        if (Map is null || Position is null)
-            return;
-
-        Map.Remove(this, Position.Value);
-        Map = null;
-        Position = null;
-    }
-
-    public void Go(Direction direction)
-    {
-        if (Map is null || Position is null)
-            return;
-
-        var current = Position.Value;
-        var next = Map.Next(current, direction);
-
-        Map.Move(this, current, next);
-        Position = next;
     }
 
     private static string ValidateName(string? raw)
@@ -93,7 +60,4 @@ public abstract class Creature
     {
         return Validator.Limiter(value, 1, 10);
     }
-
-    public virtual char Symbol => '?';
-
 }
