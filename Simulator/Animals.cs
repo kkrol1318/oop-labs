@@ -1,6 +1,8 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
 
-public class Animals
+namespace Simulator;
+
+public class Animals : IMappable
 {
     private string _description = "";
 
@@ -12,7 +14,39 @@ public class Animals
 
     public uint Size { get; set; } = 3;
 
+    public virtual char Symbol => 'A';
     public virtual string Info => $"{Description} <{Size}>";
+
+    public Map? Map { get; protected set; }
+    public Point? Position { get; protected set; }
+
+
+    public void AssignMap(Map map, Point position)
+    {
+        Map = map ?? throw new ArgumentNullException(nameof(map));
+        Position = position;
+        map.Add(this, position);
+    }
+
+    public void RemoveFromMap()
+    {
+        if (Map is null || Position is null) return;
+
+        Map.Remove(this, Position.Value);
+        Map = null;
+        Position = null;
+    }
+
+    public virtual void Go(Direction direction)
+    {
+        if (Map is null || Position is null) return;
+
+        var current = Position.Value;
+        var next = Map.Next(current, direction);
+
+        Map.Move(this, current, next);
+        Position = next;
+    }
 
     private static string ValidateDescription(string? raw)
     {
@@ -26,9 +60,5 @@ public class Animals
         return s;
     }
 
-    public override string ToString()
-    {
-        string typeName = GetType().Name.ToUpperInvariant();
-        return $"{typeName}: {Info}";
-    }
+    public override string ToString() => Info;
 }

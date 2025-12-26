@@ -61,8 +61,9 @@ public class Simulation
 
         for (int i = 0; i < Objects.Count; i++)
         {
-            Map.Add(Objects[i], positions[i]);
+            Objects[i].AssignMap(map, positions[i]);
         }
+
     }
 
     public void Turn()
@@ -70,26 +71,25 @@ public class Simulation
         if (Finished)
             throw new InvalidOperationException("Simulation already finished.");
 
-        if (_moves.Count == 0)
+        if (_turn >= _moves.Count)
         {
             Finished = true;
             return;
         }
 
-        int moveIndex = _turn % _moves.Count;
+        var obj = Objects[_turn % Objects.Count];
+        var direction = _moves[_turn];
 
-        var obj = CurrentObject;
-        var direction = _moves[moveIndex];
-
-        var from = Map.PositionOf(obj);
-        var to = Map.Next(from, direction);
-        Map.Move(obj, from, to);
+        obj.Go(direction);
 
         _turn++;
 
-        if (_turn >= _moves.Count * Objects.Count)
+        if (_turn >= _moves.Count)
             Finished = true;
+
     }
+
+
 
     public Point MapPositionOf(IMappable obj)
     {
