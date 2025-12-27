@@ -26,7 +26,8 @@ public class SimulationLog
         {
             Mappable = "(start)",
             Move = "",
-            Symbols = CaptureSymbols()
+            Symbols = CaptureSymbols(),        
+            SymbolsList = CaptureSymbolsList()   
         });
 
         while (!_simulation.Finished)
@@ -40,7 +41,8 @@ public class SimulationLog
             {
                 Mappable = mappableText,
                 Move = moveText,
-                Symbols = CaptureSymbols()
+                Symbols = CaptureSymbols(),
+                SymbolsList = CaptureSymbolsList()
             });
         }
     }
@@ -54,13 +56,27 @@ public class SimulationLog
             for (int x = 0; x < SizeX; x++)
             {
                 var list = _simulation.Map.At(x, y).ToList();
-
                 if (list.Count == 0) continue;
 
-                if (list.Count == 1)
-                    result[new Point(x, y)] = list[0].Symbol;
-                else
-                    result[new Point(x, y)] = 'X';
+                result[new Point(x, y)] = (list.Count == 1) ? list[0].Symbol : 'X';
+            }
+        }
+
+        return result;
+    }
+
+    private Dictionary<Point, List<char>> CaptureSymbolsList()
+    {
+        Dictionary<Point, List<char>> result = new();
+
+        for (int y = 0; y < SizeY; y++)
+        {
+            for (int x = 0; x < SizeX; x++)
+            {
+                var list = _simulation.Map.At(x, y).ToList();
+                if (list.Count == 0) continue;
+
+                result[new Point(x, y)] = list.Select(o => o.Symbol).ToList();
             }
         }
 
@@ -71,8 +87,8 @@ public class SimulationLog
 public class TurnLog
 {
     public required string Mappable { get; init; }
-
     public required string Move { get; init; }
 
     public required Dictionary<Point, char> Symbols { get; init; }
+    public required Dictionary<Point, List<char>> SymbolsList { get; init; }
 }

@@ -1,0 +1,63 @@
+﻿@page
+@model SimWeb.Pages.SimModel
+@{
+    ViewData["Title"] = "Symulacja";
+}
+
+<div class="sim-page">
+
+    <div class="sim-controls">
+        <form asp-page="/Sim" method="post">
+            <button class="navbtn" name="action" value="prev" @(Model.Turn <= 0 ? "disabled" : "")>←</button>
+
+            <span class="turntext">Tura <b>@Model.Turn</b> / <b>@Model.MaxTurn</b></span>
+
+            <button class="navbtn" name="action" value="next" @(Model.Turn >= Model.MaxTurn ? "disabled" : "")>→</button>
+        </form>
+    </div>
+
+    <div class="board-wrap">
+        <table class="board">
+            <tr>
+                <th class="corner"></th>
+                @for (int x = 0; x < Model.SizeX; x++)
+                {
+                    <th class="axis-x">@x</th>
+                }
+            </tr>
+
+            @for (int y = Model.SizeY - 1; y >= 0; y--)
+            {
+                <tr>
+                    <th class="axis-y">@y</th>
+                    @for (int x = 0; x < Model.SizeX; x++)
+                    {
+                        var imgs = Model.GetImages(x, y).ToList();
+                        <td>
+                            <div class="cell @(imgs.Count > 1 ? "cell-multi" : "cell-single")">
+                                @foreach (var img in imgs)
+                                {
+                                    <img src="@img" alt="" />
+                                }
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="sim-info">
+        @if (Model.Turn == 0)
+        {
+            <div class="infotext">Pozycje startowe</div>
+        }
+        else
+        {
+            <div class="infotext">
+                <b>@Model.Mappable</b> @Model.MoveArrow
+            </div>
+        }
+    </div>
+
+</div>

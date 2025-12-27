@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SimWeb</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/js/site.js"></script>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">SimWeb</div>
+
+            <nav class="topnav">
+                <a asp-page="/Index">Informacje</a>
+                <a asp-page="/Sim">Symulacja</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+</body>
+</html>
